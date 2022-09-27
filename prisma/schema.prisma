@@ -7,6 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Materials { 
+model Student { 
   id String @id @default(uuid())
+
+  enrollment Enrollment[]
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Course {
+  id String @id @default(uuid())
+
+  title String
+  slug String @unique
+
+  enrollmendOn Enrollment[]
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Enrollment {
+  id String @id @default(uuid())
+
+  student Student @relation(fields: [studentId], references: [id])
+  studentId String
+
+  course Course @relation(fields: [courseId], references: [id])
+  courseId String
+
+  canceledAt DateTime?
+  createAt  DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
 }
