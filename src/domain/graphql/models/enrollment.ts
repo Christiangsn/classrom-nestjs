@@ -9,16 +9,16 @@ export class Enrollment {
   id: string;
 
   @Field(() => Student)
-  student: Student;
+  student?: Student;
   studentId: string;
 
   @Field(() => Course)
-  course: Course;
-  courseId: string;
+  course?: Course;
+  courseId?: string;
 
   @Field(() => Date, { nullable: true })
   canceledAt: Date;
 
   @Field(() => Date)
-  createdAt: Date;
+  createAt: Date;
 }

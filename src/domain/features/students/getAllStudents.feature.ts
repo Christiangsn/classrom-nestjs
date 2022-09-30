@@ -1,7 +1,7 @@
 import { Student } from 'src/domain/graphql/models/student';
 
 export interface IGetAllStudentsFeature {
-  getAllStudents: () => Promise<IGetAllStudentsFeature.Output>;
+  students: () => Promise<IGetAllStudentsFeature.Output>;
 }
 
 export namespace IGetAllStudentsFeature {

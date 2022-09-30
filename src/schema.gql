@@ -13,7 +13,7 @@ type Enrollment {
   student: Student!
   course: Course!
   canceledAt: DateTime
-  createdAt: DateTime!
+  createAt: DateTime!
 }
 
 """
@@ -27,5 +27,17 @@ type Student {
 }
 
 type Query {
-  getAllStudents: [Student!]!
+  getAllCourses: [Course!]!
+  students: [Student!]!
+  enrollments: [Enrollment!]!
+  me: Student!
+  course(id: String!): Course!
+}
+
+type Mutation {
+  createCourse(data: CreateCourseInput!): Course!
+}
+
+input CreateCourseInput {
+  title: String!
 }

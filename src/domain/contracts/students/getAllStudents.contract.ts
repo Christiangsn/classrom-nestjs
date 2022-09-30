@@ -1,10 +1,13 @@
-import { Student } from '@prisma/client';
-import { StdioNull } from 'child_process';
+import { Enrollment, Student } from '@prisma/client';
 
 export interface IGetAllStudentsContract {
-  findAll: () => Promise<IGetAllStudentsContract.Output>;
+  findStudents: () => Promise<IGetAllStudentsContract.OutputStudents>;
+  findEnrollmentsByStudent: (
+    studentId: string,
+  ) => Promise<IGetAllStudentsContract.OutputEnrollments>;
 }
 
 export namespace IGetAllStudentsContract {
-  export type Output = Student[];
+  export type OutputStudents = Student[];
+  export type OutputEnrollments = Enrollment[];
 }
