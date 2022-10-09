@@ -1,4 +1,8 @@
-import { ApolloDriver } from '@nestjs/apollo';
+import {
+  ApolloDriver,
+  ApolloDriverConfig,
+  ApolloFederationDriver,
+} from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -14,27 +18,31 @@ import { GetAllEnrollmentRepository } from 'src/infra/gateways/prisma/repositori
 import { SlugGenerator } from 'src/infra/gateways/generators/slugify';
 import { CreateCourseRepository } from 'src/infra/gateways/prisma/repositories/courses/createCourse.repository';
 import { CreateCourseResolver } from './graphql/resolvers/courses/createCourse.resolver';
-import { MeStudentResolver } from './graphql/resolvers/students/meStudent.resolver';
 import { MeStudentRepository } from 'src/infra/gateways/prisma/repositories/students/meStudent.repository';
 import { FindOneCourseResolver } from './graphql/resolvers/courses/findCourse.resolver';
 import { FindOneCourseRepository } from 'src/infra/gateways/prisma/repositories/courses/findCourseStudent.repository';
+import { PurscheKafkaController } from './kafka/purchases.controller';
+import { CreateStudentRepository } from 'src/infra/gateways/prisma/repositories/students/createStudent.repository';
+import { CreateEnrollmentRepository } from 'src/infra/gateways/prisma/repositories/enrollments/createEnrollment.repository';
+import { GetCourseBySlugRepository } from 'src/infra/gateways/prisma/repositories/courses/getCourseBySlug.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     InfraModule,
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloFederationDriver,
       autoSchemaFile: resolve(process.cwd(), 'src/schema.gql'),
     }),
   ],
+  controllers: [PurscheKafkaController],
   providers: [
     // Resolvers...
     GetAllCoursesResolver,
     GetAllStudentsResolver,
     GetAllEnrollmentsResolver,
     CreateCourseResolver,
-    MeStudentResolver,
+    // MeStudentResolver,
     FindOneCourseResolver,
     // Injectors
     { provide: 'IGetAllStudentsContract', useClass: GetAllStudentsRepository },
@@ -47,6 +55,15 @@ import { FindOneCourseRepository } from 'src/infra/gateways/prisma/repositories/
     { provide: 'createCourseRepository', useClass: CreateCourseRepository },
     { provide: 'meStudentRepository', useClass: MeStudentRepository },
     { provide: 'coursesRepository', useClass: FindOneCourseRepository },
+    { provide: 'createStudentRepository', useClass: CreateStudentRepository },
+    {
+      provide: 'getCourseBySlugRepository',
+      useClass: GetCourseBySlugRepository,
+    },
+    {
+      provide: 'createEnrollmentRepository',
+      useClass: CreateEnrollmentRepository,
+    },
   ],
 })
 export class DomainModule {}

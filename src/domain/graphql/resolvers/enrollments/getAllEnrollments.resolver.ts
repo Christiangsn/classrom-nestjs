@@ -20,14 +20,14 @@ export class GetAllEnrollmentsResolver implements IGetAllEnrollmentsFeature {
   }
 
   @ResolveField()
-  private async student(@Parent() enrollment: Enrollment) {
+  protected async student(@Parent() enrollment: Enrollment) {
     return this.getEnrollmentInformationsRepository.findStudentById(
       enrollment.studentId,
     );
   }
 
   @ResolveField()
-  private async course(@Parent() enrollment: Enrollment) {
+  protected async course(@Parent() enrollment: Enrollment) {
     return this.getEnrollmentInformationsRepository.findCourseById(
       enrollment.courseId,
     );

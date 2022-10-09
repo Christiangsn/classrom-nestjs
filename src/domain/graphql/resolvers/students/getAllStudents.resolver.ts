@@ -20,7 +20,9 @@ export class GetAllStudentsResolver implements IGetAllStudentsFeature {
   }
 
   @ResolveField()
-  private async enrollment(@Parent() student: Student): Promise<Enrollment[]> {
+  protected async enrollment(
+    @Parent() student: Student,
+  ): Promise<Enrollment[]> {
     return await this.getStudentsInformationsRepository.findEnrollmentsByStudent(
       student.id,
     );
